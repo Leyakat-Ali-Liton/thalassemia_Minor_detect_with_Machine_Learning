@@ -1,0 +1,117 @@
+/* General Page Styling */
+body {
+    background-color: #f8f9fa; /* Soft grey background */
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    color: #333;
+    line-height: 1.6;
+}
+
+/* Predictor Card Container */
+.predictor-card {
+    max-width: 850px;
+    margin: 40px auto;
+    background: #ffffff;
+    padding: 40px;
+    border-radius: 20px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+}
+
+/* Header Section */
+.header-section h2 {
+    font-weight: 700;
+    color: #0d6efd;
+    letter-spacing: -0.5px;
+}
+
+.header-section p {
+    font-size: 1.1rem;
+    color: #6c757d;
+}
+
+/* Section Dividers */
+.section-title {
+    font-size: 0.85rem;
+    font-weight: 800;
+    color: #495057;
+    text-transform: uppercase;
+    letter-spacing: 1.2px;
+    margin-top: 25px;
+    margin-bottom: 15px;
+    padding-bottom: 5px;
+    border-bottom: 2px solid #e9ecef;
+}
+
+/* Form Controls */
+.form-label {
+    font-weight: 600;
+    font-size: 0.95rem;
+    color: #444;
+}
+
+.form-control, .form-select {
+    border: 2px solid #e9ecef;
+    border-radius: 10px;
+    padding: 12px 15px;
+    transition: all 0.3s ease;
+}
+
+.form-control:focus, .form-select:focus {
+    border-color: #0d6efd;
+    box-shadow: 0 0 0 4px rgba(13, 110, 253, 0.15);
+}
+
+/* Checkboxes */
+.form-check-input:checked {
+    background-color: #0d6efd;
+    border-color: #0d6efd;
+}
+
+/* Submit Button */
+.btn-primary {
+    background-color: #0d6efd;
+    border: none;
+    border-radius: 12px;
+    padding: 15px 30px;
+    font-weight: 700;
+    transition: transform 0.2s ease, background-color 0.2s ease;
+}
+
+.btn-primary:hover {
+    background-color: #0b5ed7;
+    transform: translateY(-2px);
+}
+
+.btn-primary:active {
+    transform: translateY(0);
+}
+
+/* Result Box Styling */
+.result-box {
+    display: none;
+    margin-top: 30px;
+    padding: 25px;
+    border-radius: 15px;
+    border: 2px solid #ffeeba;
+    background-color: #fffaf0;
+    animation: fadeIn 0.5s ease-in-out;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+#thalResultText, #ironResultText {
+    margin-bottom: 20px;
+    padding: 10px;
+    border-radius: 8px;
+    background: rgba(255, 255, 255, 0.5);
+}
+
+/* Responsive Adjustments */
+@media (max-width: 768px) {
+    .predictor-card {
+        margin: 15px;
+        padding: 20px;
+    }
+}

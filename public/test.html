@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JIBON - AI Diagnosis</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        :root { --blood-red: #8b0000; --deep-maroon: #4a0404; --soft-cream: #fff5f5; }
+        body { background-color: var(--soft-cream); font-family: 'Segoe UI', sans-serif; }
+        
+        /* Navbar Styling */
+        .navbar { background-color: var(--deep-maroon) !important; border-bottom: 3px solid var(--blood-red); }
+        .navbar-brand { font-size: 1.4rem; letter-spacing: 1px; }
+        
+        /* Interactive Nav Link */
+        .nav-link-custom { 
+            color: white !important; 
+            font-weight: bold; 
+            border: 1px solid white; 
+            border-radius: 20px; 
+            padding: 5px 20px !important; 
+            transition: 0.3s ease; 
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-block;
+        }
+        .nav-link-custom:hover, .nav-link-custom:active { 
+            background: white; 
+            color: var(--deep-maroon) !important; 
+            transform: scale(1.05);
+        }
+
+        .predictor-card { 
+            max-width: 900px; 
+            margin: 40px auto; 
+            padding: 40px; 
+            border-radius: 25px; 
+            background: white; 
+            box-shadow: 0 15px 40px rgba(139, 0, 0, 0.1);
+            border: 1px solid #ffcccc;
+        }
+
+        /* Input & Button Hovers */
+        .form-control, .form-select {
+            transition: 0.2s;
+        }
+        .form-control:focus, .form-select:focus {
+            border-color: var(--blood-red);
+            box-shadow: 0 0 0 0.25rem rgba(139, 0, 0, 0.25);
+        }
+
+        .btn-run { 
+            background: var(--blood-red); 
+            color: white; 
+            font-weight: bold; 
+            border-radius: 10px; 
+            padding: 15px; 
+            border: none; 
+            transition: 0.3s;
+            cursor: pointer;
+        }
+        .btn-run:hover, .btn-run:active { 
+            background: var(--deep-maroon); 
+            color: white; 
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+
+        /* Advice Boxes */
+        .advice-box { padding: 20px; border-radius: 15px; margin-top: 20px; border-left: 8px solid; font-weight: 500; }
+        .section-title { color: var(--blood-red); font-weight: bold; border-bottom: 2px solid #ffcccc; padding-bottom: 5px; margin: 25px 0 15px; }
+        .result-text { font-size: 1.8rem; font-weight: 800; margin-bottom: 10px; }
+
+        /* Mouse Pointer for Clickable Labels */
+        .form-check-label, .form-label { cursor: pointer; }
+    </style>
+</head>
+<body>
+
+<nav class="navbar navbar-dark shadow-sm">
+    <div class="container d-flex align-items-center">
+        <a class="nav-link-custom me-auto" href="/">HOME</a>
+        <a class="navbar-brand fw-bold mx-auto text-center" href="#" style="flex: 2;">JIBON - A project to save hematological disorder</a>
+        <div style="width: 85px;" class="d-none d-md-block"></div> 
+    </div>
+</nav>
+
+<div class="container">
+    <div class="predictor-card">
+        <h2 class="text-center fw-bold" style="color: var(--blood-red);">Patient Screening Form</h2>
+        
+        <form id="predictionForm">
+            <div class="section-title">Hematology (CBC) Data</div>
+            <div class="row g-3">
+                <div class="col-md-4"><label class="form-label">Age (Years)</label><input type="number" name="age" class="form-control" required></div>
+                <div class="col-md-4"><label class="form-label">Gender</label><select name="gender" class="form-select"><option>Male</option><option>Female</option></select></div>
+                <div class="col-md-4"><label class="form-label">Hb (Hemoglobin)</label><input type="number" step="0.1" name="hb" class="form-control" required></div>
+                
+                <div class="col-md-6"><label class="form-label">MCV</label><input type="number" step="0.1" name="mcv" class="form-control" required></div>
+                <div class="col-md-6"><label class="form-label">MCH</label><input type="number" step="0.1" name="mch" class="form-control" required></div>
+                
+                <div class="col-md-6"><label class="form-label">RDW</label><input type="number" step="0.1" name="rdw" class="form-control" required></div>
+                <div class="col-md-6"><label class="form-label">RBC Count</label><input type="number" step="0.01" name="rbc" class="form-control" required></div>
+            </div>
+
+            <div class="section-title">Clinical History</div>
+            <div class="row g-3">
+                <div class="col-md-6">
+                    <label class="form-label">Fatigue Frequency</label>
+                    <select name="fatigue" class="form-select">
+                        <option value="0">None</option>
+                        <option value="1">Everyday</option>
+                        <option value="2">Every 3 days</option>
+                        <option value="3">Every week</option>
+                        <option value="4">Every 15 days or more</option>
+                    </select>
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label">Family History?</label>
+                    <select id="familyHistory" name="familyHistory" class="form-select">
+                        <option value="No">No</option>
+                        <option value="Yes">Yes</option>
+                    </select>
+                </div>
+                
+                <div class="col-12 d-none" id="relationContainer">
+                    <label class="form-label">Relation with affected person</label>
+                    <select name="relation" class="form-select">
+                        <option value="1">Parent</option>
+                        <option value="2">Sibling</option>
+                        <option value="3">Grandparents / Uncle / Aunt</option>
+                        <option value="4">Cousin</option>
+                    </select>
+                </div>
+
+                <div class="col-12 mt-3">
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="checkbox" id="jaundice" style="cursor: pointer;">
+                        <label class="form-check-label" for="jaundice">Jaundice History</label>
+                    </div>
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="checkbox" id="spleen" style="cursor: pointer;">
+                        <label class="form-check-label" for="spleen">Splenomegaly or Cholelithiasis</label>
+                    </div>
+                </div>
+            </div>
+            
+            <button type="submit" class="btn btn-run w-100 mt-5 shadow">RUN AI DIAGNOSIS</button>
+        </form>
+
+        <div id="resultSection" class="mt-5 p-4 border rounded-4 bg-white shadow-lg" style="display: none; border-top: 10px solid var(--blood-red) !important;">
+            <h3 class="text-center fw-bold mb-4" style="color: var(--blood-red);">Screening Result</h3>
+            <div class="row text-center">
+                <div class="col-md-6 border-end">
+                    <h6 class="text-muted text-uppercase">Thalassemia Status</h6>
+                    <div id="thalRes" class="result-text"></div>
+                    <div id="thalAdv" class="advice-box"></div>
+                </div>
+                <div class="col-md-6">
+                    <h6 class="text-muted text-uppercase">Iron Status</h6>
+                    <div id="ironRes" class="result-text"></div>
+                    <div id="ironAdv" class="advice-box"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    // Toggle relation field
+    document.getElementById('familyHistory').addEventListener('change', function() {
+        document.getElementById('relationContainer').classList.toggle('d-none', this.value === 'No');
+    });
+
+    document.getElementById('predictionForm').addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const fd = new FormData(e.target);
+        const raw = Object.fromEntries(fd.entries());
+        
+        const payload = {
+            ...raw, 
+            age: parseInt(raw.age), 
+            hb: parseFloat(raw.hb), 
+            mcv: parseFloat(raw.mcv), 
+            mch: parseFloat(raw.mch), 
+            rdw: parseFloat(raw.rdw), 
+            rbc: parseFloat(raw.rbc),
+            fatigue: parseInt(raw.fatigue), 
+            family_relation: raw.familyHistory === "Yes" ? parseInt(raw.relation) : 0,
+            jaundice: document.getElementById('jaundice').checked ? 1 : 0,
+            spleen: document.getElementById('spleen').checked ? 1 : 0
+        };
+
+        try {
+            const res = await fetch('/predict', { 
+                method: 'POST', 
+                headers: {'Content-Type': 'application/json'}, 
+                body: JSON.stringify(payload) 
+            });
+            const result = await res.json();
+
+            const resSection = document.getElementById('resultSection');
+            resSection.style.display = 'block';
+
+            // --- Thalassemia Result Logic ---
+            const thalResDiv = document.getElementById('thalRes');
+            const thalAdvDiv = document.getElementById('thalAdv');
+            const thalVal = result.thalassemia.toLowerCase();
+            thalResDiv.innerText = result.thalassemia;
+
+            if (thalVal.includes("minor") && !thalVal.includes("likely")) {
+                thalResDiv.style.color = "#dc3545"; 
+                thalAdvDiv.className = "advice-box alert alert-danger text-danger";
+                thalAdvDiv.innerHTML = "🚨 <b>সতর্কতা:</b> পজিটিভ! দ্রুত <b>Hb Electrophoresis</b>টেস্ট করিয়ে শতভাগ নিশ্চিত হোন এবং চিকিৎসকের পরামর্শ নিন।";
+            } else if (thalVal.includes("likely")) {
+                thalResDiv.style.color = "#fd7e14"; 
+                thalAdvDiv.className = "advice-box alert alert-warning text-dark";
+                thalAdvDiv.style.borderColor = "#fd7e14";
+                thalAdvDiv.innerHTML = "⚠️ <b>পরামর্শ:</b>আপনার থ্যালাসেমিয়া হওয়ার সম্ভাবনা রয়েছে। সতর্কতা স্বরূপ বিশেষজ্ঞ ডাক্তারের পরামর্শ নিন।";
+            } else {
+                thalResDiv.style.color = "#198754"; 
+                thalAdvDiv.className = "advice-box alert alert-success text-success";
+                thalAdvDiv.innerHTML = "✅ <b>পরামর্শ:</b> আপনার রিপোর্ট স্বাভাবিক। Normal diet maintain করুন।";
+            }
+
+            // --- Iron Result Logic ---
+            const ironResDiv = document.getElementById('ironRes');
+            const ironAdvDiv = document.getElementById('ironAdv');
+            const ironVal = result.iron.toLowerCase();
+            ironResDiv.innerText = result.iron;
+
+            if(ironVal.includes("no iron deficiency") || ironVal.includes("healthy") || ironVal.includes("normal")) {
+                ironResDiv.style.color = "#198754"; 
+                ironAdvDiv.className = "advice-box alert alert-success text-success";
+                ironAdvDiv.innerHTML = "✅ <b>পরামর্শ:</b> আপনার আয়রনের মাত্রা স্বাভাবিক। সুষম খাদ্য গ্রহণ অব্যাহত রাখুন।";
+            } else {
+                ironResDiv.style.color = "#dc3545"; 
+                ironAdvDiv.className = "advice-box alert alert-danger text-danger";
+                ironAdvDiv.innerHTML = "💡 <b>পরামর্শ:</b> আপনার আয়রনের ঘাটতি রয়েছে। আয়রন সমৃদ্ধ খাবার বেশি করে খান।";
+            }
+
+            resSection.scrollIntoView({ behavior: 'smooth' });
+        } catch (err) {
+            alert("Error connecting to server. Please try again.");
+        }
+    });
+</script>
+</body>
+</html>

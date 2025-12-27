@@ -1,0 +1,12 @@
+User ID,Age,Gender,Hb,MCV,MCH,RDW,RBC,Fatigue Frequency,Family Relation,Jaundice,Splenomegaly or Cholelithiasis,Mentzer Index,Green King Index,Probability,Thalassemia Result,Iron Deficiency Result
+1,13,Male,11.0,70.0,29.0,12.0,4.6,1,1,0,1,15.22,53.45,0.84,Thalassemia Minor,No Iron Deficiency
+2,23,Female,11,55,29,12,4.7,1,1,1,1,11.7,33,Thalassemia Minor,No Iron Deficiency
+3,15,Female,13,79,23,18,4.3,4,0,1,0,18.37,86.41,Normal Healthy,No Iron Deficiency
+4,15,Female,13,79,20,18,4.3,4,0,1,0,18.37,86.41,Normal Healthy,No Iron Deficiency
+5,19,Male,14,88,23,16,4.6,3,0,1,0,19.13,88.5,Normal Healthy,Iron Deficiency Positive
+6,11,Female,10,65,27,12,4.4,3,4,1,1,14.77,50.7,Thalassemia Minor,No Iron Deficiency
+7,11,Female,11,70,27,12,4.4,4,4,1,0,15.91,53.45,Thalassemia Minor,No Iron Deficiency
+8,11,Female,12,70,27,12,4.4,4,4,1,0,15.91,49,Thalassemia Minor,Iron Deficiency Positive
+9,11,Female,12,79,27,12,4.4,4,4,1,0,17.95,62.41,Normal Healthy,No Iron Deficiency
+10,11,Female,12,79,24,12,4.4,4,4,1,0,17.95,62.41,Likely Thalassemia Minor,No Iron Deficiency
+11,11,Female,12,82,23,16,4.4,4,4,1,0,18.64,89.65,Likely Thalassemia Minor,Iron Deficiency Positive

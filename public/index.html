@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JIBON - Hematological Disorder Screening</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.0.0"></script>
+    <style>
+        :root { 
+            --blood-red: #8b0000; 
+            --deep-maroon: #4a0404; 
+            --soft-cream: #fff5f5; 
+        }
+        body { 
+            background-color: var(--soft-cream); 
+            font-family: 'Segoe UI', sans-serif; 
+            color: #333; 
+        }
+        .navbar-brand {
+            margin-right: 0;
+            width: 100%;
+            text-align: center;
+            letter-spacing: 1px;
+            font-size: 1.4rem;
+        }
+        .hero-section { 
+            background: linear-gradient(135deg, var(--deep-maroon) 0%, var(--blood-red) 100%); 
+            color: white; 
+            padding: 80px 0; 
+            border-radius: 0 0 50px 50px; 
+            box-shadow: 0 10px 30px rgba(139, 0, 0, 0.3); 
+        }
+        .stat-card { 
+            background: white; 
+            padding: 25px; 
+            border-radius: 20px; 
+            box-shadow: 0 8px 20px rgba(0,0,0,0.08); 
+            height: 100%; 
+            border-top: 5px solid var(--blood-red); 
+            transition: transform 0.3s ease;
+        }
+        .stat-card:hover {
+            transform: translateY(-5px);
+        }
+        .profile-img {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 4px solid var(--soft-cream);
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+            margin-bottom: 15px;
+        }
+        .section-title-custom { 
+            color: var(--blood-red); 
+            font-weight: bold; 
+            margin-bottom: 20px; 
+            border-left: 5px solid var(--blood-red); 
+            padding-left: 15px; 
+        }
+        .btn-custom { 
+            font-weight: bold; 
+            padding: 12px 30px; 
+            border-radius: 30px; 
+            transition: 0.3s; 
+            margin: 5px; 
+        }
+        .btn-diagnosis { 
+            background-color: white; 
+            color: var(--blood-red); 
+            border: 2px solid white; 
+        }
+        .btn-admin { 
+            background-color: transparent; 
+            color: white; 
+            border: 2px solid white; 
+        }
+        .btn-custom:hover { 
+            transform: scale(1.05); 
+            opacity: 0.9; 
+            color: gold; 
+        }
+        footer { 
+            background: var(--deep-maroon); 
+            color: white; 
+            padding: 30px 0; 
+            margin-top: 50px; 
+        }
+        .sdg-badge {
+            background-color: #4C9F38;
+            color: white;
+            padding: 5px 12px;
+            border-radius: 5px;
+            font-weight: bold;
+            display: inline-block;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+
+<nav class="navbar navbar-dark shadow-sm" style="background-color: var(--deep-maroon);">
+    <div class="container-fluid">
+        <a class="navbar-brand fw-bold" href="#">
+            JIBON: Save Hematological Disorder
+        </a>
+    </div>
+</nav>
+
+<div class="hero-section text-center">
+    <div class="container">
+        <h1 class="display-4 fw-bold">Thalassemia & Iron AI Screening</h1>
+        <p class="lead mb-4">রক্তের রোগ নির্ণয়ে কৃত্রিম বুদ্ধিমত্তার ব্যবহার</p>
+        <div class="d-flex justify-content-center flex-wrap">
+            <a class="btn btn-custom btn-diagnosis shadow" href="/test">START DIAGNOSIS</a>
+            <a class="btn btn-custom btn-admin shadow" href="/admin">ADMIN PANEL</a>
+        </div>
+    </div>
+</div>
+
+<div class="container mt-5">
+    <div class="row g-4 mb-5">
+        <div class="col-md-6">
+            <div class="stat-card">
+                <h5 class="text-center mb-4 fw-bold" style="color: var(--blood-red);">Thalassemia Screening Status</h5>
+                <div style="height: 350px;"><canvas id="thalDonut"></canvas></div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="stat-card">
+                <h5 class="text-center mb-4 fw-bold" style="color: var(--blood-red);">Iron Deficiency Status</h5>
+                <div style="height: 350px;"><canvas id="ironDonut"></canvas></div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row g-4 mb-5">
+        <div class="col-md-6">
+            <div class="stat-card">
+                <h4 class="section-title-custom">About Project</h4>
+                <p>থ্যালাসেমিয়া একটি মারাত্মক বংশগত রক্তাল্পতা। যদি মা এবং বাবা উভয়ই থ্যালাসেমিয়ার বাহক (Carrier/Minor) হন, তবে তাদের সন্তানের <b>'থ্যালাসেমিয়া মেজর'</b> হওয়ার ঝুঁকি থাকে ২৫%।</p>
+                <p>একজন 'মেজর' রোগীকে সারাজীবন প্রতি মাসে ১-২ ব্যাগ রক্ত গ্রহণ করতে হয় এবং আয়রন কমানোর জন্য অত্যন্ত ব্যয়বহুল চিকিৎসা চালিয়ে যেতে হয়, যা একটি সাধারণ পরিবারের জন্য দুঃসাধ্য।</p>
+                <div class="alert alert-danger border-0" style="background-color: #fff0f0;">
+                    <strong>কেন এই প্রজেক্ট?</strong> আমাদের AI মডেল সাধারণ ও সাশ্রয়ী CBC রিপোর্ট বিশ্লেষণ করে বাহক শনাক্ত করতে পারে। বিয়ের আগে বা সন্তান নেওয়ার আগে বাহক শনাক্তকরণের মাধ্যমে আমরা আগামী প্রজন্মকে 'থ্যালাসেমিয়া মেজর' হওয়ার আজীবন কষ্ট ও আর্থিক ধস থেকে রক্ষা করতে সক্ষম।
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="stat-card">
+                <h4 class="section-title-custom">Our Goals & SDG</h4>
+                <ul class="list-group list-group-flush">
+                    <li class="list-group-item bg-transparent">🔍 <b>Early Detection:</b> বিবাহের পূর্বে স্ক্রিনিংয়ের মাধ্যমে বাহক শনাক্ত করে থ্যালাসেমিয়া মুক্ত সমাজ গঠন করা।</li>
+                    <li class="list-group-item bg-transparent">📉 <b>Risk Reduction:</b> মা-বাবা উভয়ই বাহক হলে জেনেটিক কাউন্সেলিংয়ের মাধ্যমে 'মেজর' শিশু জন্মের হার শূন্যে নামিয়ে আনা।</li>
+                    <li class="list-group-item bg-transparent">💰 <b>Cost Effective:</b> ৩০০০ টাকার টেস্টের বদলে মাত্র ৪০০ টাকার টেস্টে প্রাথমিক শনাক্তকরণ নিশ্চিত করা।</li>
+                </ul>
+                <hr>
+                <h6><b>SDG Alignment:</b></h6>
+                <div class="sdg-badge">SDG 3: Good Health and Well-being</div>
+                <p class="small mt-2">আমাদের প্রজেক্ট <b>SDG গোল ৩.৪</b> (অসংক্রামক ব্যাধি প্রতিরোধ) এবং <b>৩.ডি</b> (জাতীয় স্বাস্থ্য ঝুঁকি ব্যবস্থাপনা) অর্জনে সরাসরি ভূমিকা রাখছে।</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="row mb-5">
+        <div class="col-12">
+            <h4 class="text-center fw-bold mb-4" style="color: var(--blood-red);">Contact Our Team</h4>
+            <div class="row g-4 justify-content-center text-center">
+                <div class="col-md-4">
+                    <div class="stat-card p-4 border-0 shadow-sm h-100">
+                        <img src="leyakat.png" alt="Leyakat Ali" class="profile-img">
+                        <h6 class="fw-bold mb-1" style="color: var(--blood-red);">Leyakat Ali</h6> 
+                        <p class="text-muted small mb-2">Project Lead and Medical Analyst</p>
+                        <div class="d-flex justify-content-center gap-3">
+                            <a href="mailto:leyakataliliton@gmail.com" class="text-dark"><i class="fas fa-envelope"></i></a>
+                            <a href="https://www.linkedin.com/in/leyakat-ali-patwary-8807bb304/" target="_blank" style="color: #0077b5;"><i class="fab fa-linkedin fa-lg"></i></a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="stat-card p-4 border-0 shadow-sm h-100">
+                        <img src="mily.png" alt="Farzana Akter Mily" class="profile-img">
+                        <h6 class="fw-bold mb-1" style="color: var(--blood-red);">Farzana Akter Mily</h6>
+                        <p class="text-muted small mb-2">Machine Learning and Model Expert</p>
+                        <div class="d-flex justify-content-center gap-3">
+                            <a href="mailto:farzanamily272@gmail.com" class="text-dark"><i class="fas fa-envelope"></i></a>
+                            <a href="https://www.linkedin.com/in/farzana-akter-mily-7b8799255/" target="_blank" style="color: #0077b5;"><i class="fab fa-linkedin fa-lg"></i></a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="stat-card p-4 border-0 shadow-sm h-100">
+                        <img src="shafin.png" alt="Shafin Chowdhury" class="profile-img">
+                        <h6 class="fw-bold mb-1" style="color: var(--blood-red);">Shafin Chowdhury</h6>
+                        <p class="text-muted small mb-2">Project Interface Developer</p>
+                        <div class="d-flex justify-content-center gap-3">
+                            <a href="mailto:shafinchowdhury2001@gmail.com" class="text-dark"><i class="fas fa-envelope"></i></a>
+                            <a href="https://www.linkedin.com/in/shafin-chowdhury-1873a021a/" target="_blank" style="color: #0077b5;"><i class="fab fa-linkedin fa-lg"></i></a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<footer>
+    <div class="container text-center">
+        <p>&copy; 2025 Blood AI Screening Project. All Rights Reserved.</p>
+    </div>
+</footer>
+
+<script>
+    Chart.register(ChartDataLabels);
+
+    async function initCharts() {
+        try {
+            const res = await fetch('/api/stats');
+            const s = await res.json();
+            
+            const commonOptions = (total) => ({
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: { position: 'bottom' },
+                    datalabels: {
+                        color: '#fff',
+                        font: { weight: 'bold', size: 14 },
+                        formatter: (value) => value > 0 ? value : ""
+                    }
+                },
+                elements: {
+                    center: { text: `Total: ${total}` }
+                }
+            });
+
+            // Thalassemia Chart
+            new Chart(document.getElementById('thalDonut'), {
+                type: 'doughnut',
+                data: {
+                    labels: ['Normal', 'Likely', 'Positive'],
+                    datasets: [{
+                        data: [s.thalNormal, s.thalLikely, s.thalPositive],
+                        backgroundColor: ['#2d6a4f', '#d97706', '#991b1b']
+                    }]
+                },
+                options: commonOptions(s.thalNormal + s.thalLikely + s.thalPositive),
+                plugins: [{
+                    id: 'centerText',
+                    beforeDraw: function(chart) {
+                        var width = chart.width, height = chart.height, ctx = chart.ctx;
+                        ctx.restore();
+                        var fontSize = (height / 180).toFixed(2);
+                        ctx.font = "bold " + fontSize + "em sans-serif";
+                        ctx.textBaseline = "middle";
+                        ctx.fillStyle = "#8b0000";
+                        var text = `Total: ${chart.config.options.elements.center.text.split(': ')[1]}`,
+                            textX = Math.round((width - ctx.measureText(text).width) / 2),
+                            textY = height / 1.85;
+                        ctx.fillText(text, textX, textY);
+                        ctx.save();
+                    }
+                }]
+            });
+
+            // Iron Chart
+            new Chart(document.getElementById('ironDonut'), {
+                type: 'doughnut',
+                data: {
+                    labels: ['Healthy', 'Deficient'],
+                    datasets: [{
+                        data: [s.ironNormal, s.ironDeficient],
+                        backgroundColor: ['#1e40af', '#991b1b']
+                    }]
+                },
+                options: commonOptions(s.ironNormal + s.ironDeficient),
+                plugins: [{
+                    id: 'centerText',
+                    beforeDraw: function(chart) {
+                        var width = chart.width, height = chart.height, ctx = chart.ctx;
+                        ctx.restore();
+                        var fontSize = (height / 180).toFixed(2);
+                        ctx.font = "bold " + fontSize + "em sans-serif";
+                        ctx.textBaseline = "middle";
+                        ctx.fillStyle = "#8b0000";
+                        var text = `Total: ${chart.config.options.elements.center.text.split(': ')[1]}`,
+                            textX = Math.round((width - ctx.measureText(text).width) / 2),
+                            textY = height / 1.85;
+                        ctx.fillText(text, textX, textY);
+                        ctx.save();
+                    }
+                }]
+            });
+        } catch (e) { console.error(e); }
+    }
+    initCharts();
+</script>
+</body>
+</html>
